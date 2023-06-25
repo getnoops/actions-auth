@@ -1,14 +1,13 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+import { getInput, setOutput } from '@actions/core';
 
-try {
-  const companyId = core.getInput('company_id');
-  console.log(`Hello ${companyId}!`);
-  core.setOutput("company_id", companyId);
+/**
+ * Executes the main action.
+ */
+async function run(): Promise<void> {
+  const companyId = getInput('company_id');
+  setOutput("company_id", companyId);
   
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`);
-} catch (error) {
-  core.setFailed(error.message);
+  console.log(`Hello ${companyId}!`);
 }
+
+run();
