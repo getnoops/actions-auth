@@ -1,0 +1,21 @@
+name: 'Authenticate to NoOps'
+auther: 'NoOps'
+description: |-
+  Authenticate to NoOps from GitHub Actions
+inputs:
+  company_id:
+    description: |-
+      ID of the Company to use for future API calls and invocations.
+outputs:
+  company_id:
+    description: |-
+      The Company Id that was used for the authentication.
+
+branding:
+  icon: 'lock'
+  color: 'purple'
+
+runs:
+  using: 'node16'
+  main: 'dist/main/index.js'
+  post: 'dist/post/index.js'
