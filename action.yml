@@ -6,6 +6,10 @@ inputs:
   company_id:
     description: |-
       ID of the Company to use for future API calls and invocations.
+  base_path:
+    description: |-
+      The base path to post the authentication request to.
+    required: false
 outputs:
   company_id:
     description: |-

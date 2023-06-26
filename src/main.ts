@@ -3,10 +3,12 @@ import { Client } from './client/client';
 
 async function run(): Promise<void> {
   const companyId = getInput('company_id');
+  const base_path = getInput('base_path') || undefined;
   const audience = getInput('audience') || `https://sts.getnoops.com/${companyId}`;
 
   const githubToken = await getIDToken(audience);
   const client = new Client({
+    basePath: base_path,
     providerId: companyId,
     token: githubToken,
     audience: audience,
