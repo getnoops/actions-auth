@@ -7,14 +7,8 @@ interface ClientOptions {
   audience: string;
 }
 
-
-// Do not listen to the linter - this can NOT be rewritten as an ES6 import statement.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { version: appVersion } = require('../package.json');
-
 // userAgent is the default user agent.
-const userAgent = `getnoops:actions-auth/${appVersion}`;
-
+const userAgent = `getnoops:actions-auth/1.0.0`;
 
 export class Client  {
   readonly basePath: string;
