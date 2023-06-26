@@ -28,7 +28,7 @@ export class Client  {
   }
   
   async getAuthToken(): Promise<string> {
-    const pth = this.basePath + `/token`;
+    const pth = this.basePath + `/oauth/token`;
 
     const data = {
       audience: this.providerId,
