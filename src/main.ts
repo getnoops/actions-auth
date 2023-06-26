@@ -1,30 +1,23 @@
-import { getInput, setOutput, getIDToken } from '@actions/core';
+import { getInput, setOutput, getIDToken, setSecret } from '@actions/core';
+import { Client } from './client/client';
 
-const oidcWarning =
-  `GitHub Actions did not inject $ACTIONS_ID_TOKEN_REQUEST_TOKEN or ` +
-  `$ACTIONS_ID_TOKEN_REQUEST_URL into this job. This most likely means the ` +
-  `GitHub Actions workflow permissions are incorrect, or this job is being ` +
-  `run from a fork. For more information, please see https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token`;
-  
-/**
- * Executes the main action.
- */
 async function run(): Promise<void> {
-  const workloadIdentityProvider = getInput('workload_identity_provider');
-  const audience = getInput('audience') || `https://iam.googleapis.com/${workloadIdentityProvider}`;
-
-  // If we're going to do the OIDC dance, we need to make sure these values
-  // are set. If they aren't, core.getIDToken() will fail and so will
-  // generating the credentials file.
-  const oidcTokenRequestToken = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
-  const oidcTokenRequestURL = process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
-  if (!oidcTokenRequestToken || !oidcTokenRequestURL) {
-    throw new Error(oidcWarning);
-  }
-
-  const token = await getIDToken(audience);
-
   const companyId = getInput('company_id');
+  const audience = getInput('audience') || `https://sts.getnoops.com/${companyId}`;
+
+  const githubToken = await getIDToken(audience);
+  const client = new Client({
+    providerId: companyId,
+    token: githubToken,
+    audience: audience,
+  });
+  
+  const authToken = await client.getAuthToken();
+
+  setSecret(githubToken);
+  setOutput('token', githubToken);
+  setSecret(authToken);
+  setOutput('auth_token', authToken);
   setOutput("company_id", companyId);
   
   console.log(`Hello ${companyId}!`);
